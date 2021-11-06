@@ -36,7 +36,7 @@ class AddRouteScreen extends StatelessWidget {
 
 
         try {
-          bool _success = await _dbProvider.insert('route',{
+          bool _success = await _dbProvider.insertRoute('route',{
             'id' : uuid.v4(),
             'name' : _form['name'],
             'description' : _form['description'],
@@ -108,7 +108,7 @@ class AddRouteScreen extends StatelessWidget {
                                     ElevatedButton(
                                       //onPressed: _saveForm, 
                                       onPressed: _saveForm,
-                                      child: Text('Add Review'))
+                                      child: Text('Add Route'))
                                   ],
                                 ),
                               ),

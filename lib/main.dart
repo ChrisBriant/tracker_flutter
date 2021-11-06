@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'screens/point_list_screen.dart';
 import 'screens/add_route_screen.dart';
 import 'screens/route_list_screen.dart';
 import 'screens/record_location_screen.dart';
@@ -33,6 +34,7 @@ class Tracker extends StatelessWidget {
         routes: {
           AddRouteScreen.routeName : (ctx) => AddRouteScreen(),
           RecordLocationScreen.routeName : (ctx) => RecordLocationScreen(),
+          PointListScreen.routeName : (ctx) =>  PointListScreen(),
         },
       ),
     );

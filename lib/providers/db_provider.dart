@@ -8,6 +8,7 @@ import '../helpers/custom_exception.dart';
 class DBProvider with ChangeNotifier {
   List<RecordedRoute> _routes = [];
   RecordedRoute? _selectedRoute;
+  List<Point> _selectedPoints = [];
   
   static Future<Database> database() async {  
     final dbPath = await sql.getDatabasesPath();
@@ -87,6 +88,30 @@ class DBProvider with ChangeNotifier {
     return _routes;
   }
 
+  Future<List<Point>> getPoints() async {
+    final db = await DBProvider.database();
+    List<Map<String,Object?>> _resultSet =  await db.query(
+      'point',
+      where: 'routeid = "${_selectedRoute!.id}"',           
+    );
+    for(var _result in _resultSet) {
+      _selectedPoints.add(
+        Point(
+          id: _result['id'].toString(), 
+          lat: double.parse(_result['lat'].toString()),
+          lng: double.parse(_result['lng'].toString()), 
+          dateAdded: DateTime.parse(_result['dateadded'].toString()), 
+          sequenceNumber: int.parse(_result['sequencenumber'].toString()),
+          isStart: _result['isstart'] == 1 ? true : false,
+          isEnd: _result['isend'] == 1 ? true : false,
+        )
+      );
+      print(_result);
+
+    }
+    return _selectedPoints;
+  }
+
   Future<int> getRowCount(String table) async {
     final db = await DBProvider.database();
     //sql.Sqflite.firstIntValue(
@@ -112,6 +137,10 @@ class DBProvider with ChangeNotifier {
     return _selectedRoute!;
   }
 
+  List<Point> get loadedPoints {
+    return _selectedPoints;
+  }
+
 }
 
 class RecordedRoute {
@@ -126,4 +155,25 @@ class RecordedRoute {
     required this.dateAdded,
     required this.description
   });
+}
+
+class Point {
+  String id;
+  double lat;
+  double lng;
+  DateTime dateAdded;
+  int sequenceNumber;
+  bool isStart;
+  bool isEnd;
+
+  Point({
+    required this.id,
+    required this.lat,
+    required this.lng,
+    required this.dateAdded,
+    required this.sequenceNumber,
+    required this.isStart,
+    required this.isEnd
+  });
+
 }

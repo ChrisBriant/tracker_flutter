@@ -48,7 +48,10 @@ class RouteListScreen extends StatelessWidget {
                     ),
                     onTap: () {
                       dbProvider.selectedRoute = db.loadedRoutes[i];
-                      Navigator.of(context).pushNamed(RecordLocationScreen.routeName);
+                      Navigator.of(context).pushNamed(
+                        RecordLocationScreen.routeName,
+                        arguments: {'routeId' : db.selectedRoute.id}
+                      );
                     },
                   ),
                 )

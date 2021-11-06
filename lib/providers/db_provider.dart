@@ -38,7 +38,7 @@ class DBProvider with ChangeNotifier {
     );
   } 
 
-  Future<bool> insert(String table, Map<String,Object> data) async {
+  Future<bool> insertRoute(String table, Map<String,Object> data) async {
     final db = await DBProvider.database();
     try {
       var id = await db.insert(table, data, conflictAlgorithm: sql.ConflictAlgorithm.replace);
@@ -51,6 +51,20 @@ class DBProvider with ChangeNotifier {
           description: data['description'].toString()
         ));
         notifyListeners();
+        return true;
+      } else {
+        throw CustomException('Unable to add to the database');
+      }
+    } catch(err) {
+      throw CustomException('Unable to add to the database');
+    }
+  }
+
+    static Future<bool> insert(String table, Map<String,Object> data) async {
+    final db = await DBProvider.database();
+    try {
+      var id = await db.insert(table, data, conflictAlgorithm: sql.ConflictAlgorithm.replace);
+      if(id != 0) {
         return true;
       } else {
         throw CustomException('Unable to add to the database');

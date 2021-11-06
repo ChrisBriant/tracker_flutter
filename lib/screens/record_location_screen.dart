@@ -23,23 +23,28 @@ class _RecordLocationScreenState extends State<RecordLocationScreen> {
   Location _location = new Location();
   int _sequenceNumber = 1;
   bool _recording = false;
+  String routeId = '';
 
   _addRoute() async {
-    var uuid = Uuid();
-    try {
-      bool _success = await DBProvider.insert('point',{
-            'id' : uuid.v4(),
-            'lat' : _lat,
-            'lng' : _lng,
-            'dateadded' : DateTime.now().toIso8601String(),
-            'sequencenumber' : _sequenceNumber,
-            'isstart' : 0,
-            'isend' : 0,
-            'routeid' : DBProvider.selectedRoute.id,
-      });
-    } catch(err) {
-      print(err);
+    print(routeId);
+    if(routeId != '') {
+      var uuid = Uuid();
+      try {
+        bool _success = await DBProvider.insert('point',{
+              'id' : uuid.v4(),
+              'lat' : _lat,
+              'lng' : _lng,
+              'dateadded' : DateTime.now().toIso8601String(),
+              'sequencenumber' : _sequenceNumber,
+              'isstart' : 0,
+              'isend' : 0,
+              'routeid' : routeId,
+        });
+      } catch(err) {
+        print(err);
+      }
     }
+
   }
 
   Future<void> _initLocation() async {
@@ -74,7 +79,7 @@ class _RecordLocationScreenState extends State<RecordLocationScreen> {
         print('${event.latitude}');
         print('${event.longitude}');
         print(_sequenceNumber);
-        //_addRoute();
+        _addRoute();
         _sequenceNumber++;
       }
       _lat = event.latitude!;
@@ -93,7 +98,7 @@ class _RecordLocationScreenState extends State<RecordLocationScreen> {
   Widget build(BuildContext context) {
     final _dbProvider = Provider.of<DBProvider>(context, listen: false);
     //final locationProvider = Provider.of<LocationProvider>(context, listen: false);
-
+    routeId = _dbProvider.selectedRoute.id;
 
 
 
